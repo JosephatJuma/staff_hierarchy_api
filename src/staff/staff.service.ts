@@ -17,41 +17,71 @@ export class StaffService {
     },
   });
 
-  const hierarchy = [];
-  const queue = rootMembers.slice(); // Initialize the queue with top-level members
-
-  while (queue.length > 0) {
-    const member = queue.shift();
-    const node = {
-      id: member.id,
-      role: member.role,
-      name: member.name,
-      subordinates: [],
-    };
-
-    let innerQueue = [member]; // Initialize an inner queue with the current member
-
-    while (innerQueue.length > 0) {
-      const currentMember = innerQueue.shift();
-
-      const subordinates = await this.prisma.staffMember.findMany({
-        where: {
-          supervisorId: currentMember.id,
-        },
-        include:{supervisor:true}
-      });
-
-      node.subordinates.push(...subordinates);
-      innerQueue.push(...subordinates);
-
-      if (currentMember.supervisorId === null) {
-        hierarchy.push(node); // Add top-level members to the hierarchy
-      }
-    }
-  }
-
+  const hierarchy = rootMembers.map((member) => this.buildHierarchy(member));
   return hierarchy;
 }
+
+// Recursive function to build the hierarchy
+buildHierarchy(member) {
+  const node = {
+    id: member.id,
+    role: member.role,
+    name: member.name,
+    subordinates: [],
+  };
+
+  const subordinates = member.subordinates;
+  for (const subordinate of subordinates) {
+    const subordinateNode = this.buildHierarchy(subordinate);
+    node.subordinates.push(subordinateNode);
+  }
+
+  return node;
+}
+
+  //three
+//   async getStaffHierarchy() {
+//   const rootMembers = await this.prisma.staffMember.findMany({
+//     where: {
+//       supervisorId: null, // Find top-level members with no supervisor
+//     },
+//   });
+
+//   const hierarchy = [];
+//   const queue = rootMembers.slice(); // Initialize the queue with top-level members
+
+//   while (queue.length > 0) {
+//     const member = queue.shift();
+//     const node = {
+//       id: member.id,
+//       role: member.role,
+//       name: member.name,
+//       subordinates: [],
+//     };
+
+//     let innerQueue = [member]; // Initialize an inner queue with the current member
+
+//     while (innerQueue.length > 0) {
+//       const currentMember = innerQueue.shift();
+
+//       const subordinates = await this.prisma.staffMember.findMany({
+//         where: {
+//           supervisorId: currentMember.id,
+//         },
+//         include:{supervisor:true}
+//       });
+
+//       node.subordinates.push(...subordinates);
+//       innerQueue.push(...subordinates);
+
+//       if (currentMember.supervisorId === null) {
+//         hierarchy.push(node); // Add top-level members to the hierarchy
+//       }
+//     }
+//   }
+
+//   return hierarchy;
+// }
 
 
   //second
