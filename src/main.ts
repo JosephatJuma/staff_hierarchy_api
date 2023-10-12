@@ -17,11 +17,11 @@ async function bootstrap() {
   };
   app.enableCors(options);
   app.use(cookieParser());
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-    }),
-  );
+  // app.useGlobalPipes(
+  //   new ValidationPipe({
+  //     whitelist: true,
+  //   }),
+  // );
   const config = new DocumentBuilder()
     .setTitle('Staff Hierachy API')
     .setDescription('The Staff Hierachy API description')
