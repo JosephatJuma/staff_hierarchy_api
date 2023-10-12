@@ -8,14 +8,9 @@ export class UserService {
     constructor(private prisma: PrismaClient) { }
     async createUser(dto: CreateUserDto ) {
         const staffMember = await this.prisma.staffMember.create({
-                    data: {
-                        name: dto.name,
-                        role: dto.role, 
-                    },
-                })
-                return { message: "Staff member created successfully", staffMember };
-        
-        
+            data: {...dto },
+        })
+        return { message: "Staff member created successfully", staffMember }; 
     }
     async deleteUser(id: string) {
          await this.checkStaffExist(id, "Staff does not exist");
