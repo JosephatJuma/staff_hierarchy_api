@@ -42,7 +42,7 @@ export class StaffController {
         description: 'Staff member added',
     })
     addStaff(@Body() dto: CreateUserDto) {
-       return this.userService.createUser(dto, 'staff');
+       return this.userService.createUser(dto);
     }
   
      //Get all Staff
@@ -64,7 +64,7 @@ export class StaffController {
   })
   @ApiOperation({ summary: 'Delete a staff member' })
   deleteStaff(@Param('id') id: string){
-      return this.userService.deleteUser(id, 'staff');
+      return this.userService.deleteUser(id);
   }
 
   //Edit a staff
@@ -75,6 +75,6 @@ export class StaffController {
     description:'Staff member edited',
   })
   editStaff(@Param('id') id: string, @Body() dto: CreateUserDto){
-      return this.userService.editUser(id, dto, 'staff');
+      return this.userService.editStaff(id, dto);
   }
 }

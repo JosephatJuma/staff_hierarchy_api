@@ -7,7 +7,7 @@ export class StaffService {
   
   
   async getAllStaff() {
-    const staff = await this.prisma.staff.findMany();
+    const staff = await this.prisma.staffMember.findMany();
     return staff;
   }
 
