@@ -19,12 +19,12 @@ model StaffMember {
   subordinates StaffMember[] @relation("SupervisorToMembers")
 }
 
-// model Staff {
-//   id        String   @id @default(uuid())
-//   name      String
-//   role      String
-//   managerId String?
-//   Manager   Manager? @relation(fields: [managerId], references: [id])
+// model Role {
+//   id           String       @id @default(uuid())
+//   name         String
+//   descrption   String
+//   supervisor   StaffMember? @relation(fields: [supervisorId], references: [id])
+//   supervisorId String?
 // }
 
 // model Manager {

@@ -55,6 +55,16 @@ export class StaffController {
     findAll(){
         return this.staffService.getAllStaff();
   }
+   //Get all Staff hierarchy
+  @Get("/hierarchy")
+  @ApiOperation({ summary: 'Get Staff in Hierarchy' })
+  @ApiResponse({
+    status: 200,
+    description: 'Staff Hierarchy Returned',
+  })
+    getHierachy(){
+        return this.staffService.getStaffHierarchy();
+  }
   
   //Delete a staff
   @Delete(':id')
