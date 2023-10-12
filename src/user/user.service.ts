@@ -8,7 +8,7 @@ export class UserService {
     constructor(private prisma: PrismaClient) { }
     async createUser(dto: CreateUserDto ) {
         const staffMember = await this.prisma.staffMember.create({
-            data: {name:dto.name, role: dto.role, supervisorId: dto.supervisorId},
+            data: {...dto },
         })
         return { message: "Staff member created successfully", staffMember }; 
     }
