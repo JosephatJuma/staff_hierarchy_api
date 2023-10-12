@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model StaffMember {
+  id           String        @id @default(uuid())
+  name         String
+  role         String
+  supervisor   StaffMember?  @relation("SupervisorToMembers", fields: [supervisorId], references: [id])
+  supervisorId String?
+  subordinates StaffMember[] @relation("SupervisorToMembers")
+}
+
+// model Staff {
+//   id        String   @id @default(uuid())
+//   name      String
+//   role      String
+//   managerId String?
+//   Manager   Manager? @relation(fields: [managerId], references: [id])
+// }
+
+// model Manager {
+//   id                String           @id @default(uuid())
+//   name              String
+//   role              String
+//   Staff             Staff[]
+//   topLevelManagerId String?
+//   TopLevelManager   TopLevelManager? @relation(fields: [topLevelManagerId], references: [id])
+// }
+
+// model TopLevelManager {
+//   id      String    @id @default(uuid())
+//   name    String
+//   role    String
+//   Manager Manager[]
+// }
