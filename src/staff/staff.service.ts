@@ -10,34 +10,46 @@ export class StaffService {
     const staff = await this.prisma.staffMember.findMany({ include: { subordinates: true, supervisor: true } });
     return staff;
   }
-  async getStaffHierarchy() {
+
+async getStaffHierarchy() {
   const rootMembers = await this.prisma.staffMember.findMany({
     where: {
       supervisorId: null, // Find top-level members with no supervisor
     },
   });
 
-  const hierarchy = rootMembers.map((member) => this.buildHierarchy(member));
+  // Fetch the subordinates for each root member and build the hierarchy
+  const hierarchy = await Promise.all(rootMembers.map(async member => {
+    return this.buildHierarchy(member);
+  }));
+
   return hierarchy;
 }
 
-// Recursive function to build the hierarchy
-buildHierarchy(member) {
+async buildHierarchy(member) {
+  const subordinates = await this.prisma.staffMember.findMany({
+    where: {
+      supervisorId: member.id,
+    },
+  });
+
+  // Fetch the subordinates for each subordinate member
+  const subordinateNodes = await Promise.all(subordinates.map(async subordinate => {
+    return this.buildHierarchy(subordinate);
+  }));
+
+  // Build the member node
   const node = {
     id: member.id,
     role: member.role,
     name: member.name,
-    subordinates: [],
+    subordinates: subordinateNodes,
   };
-
-  const subordinates = member.subordinates;
-  for (const subordinate of subordinates) {
-    const subordinateNode = this.buildHierarchy(subordinate);
-    node.subordinates.push(subordinateNode);
-  }
 
   return node;
 }
+
+
 
   //three
 //   async getStaffHierarchy() {
