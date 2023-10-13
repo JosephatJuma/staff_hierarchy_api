@@ -7,7 +7,7 @@ export class StaffService {
 
   async getAllStaff() {
     const staff = await this.prisma.staffMember.findMany({
-      orderBy:{supervisorId:null},
+      //orderBy:{supervisorId:null},
       include: { subordinates: true, supervisor: true },  
     });
     return staff;
