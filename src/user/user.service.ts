@@ -25,13 +25,7 @@ export class UserService {
     async editStaff(id: string, dto: CreateUserDto,) {
         await this.checkStaffExist(id, "Staff does not exist");
         const staff = await this.prisma.staffMember.update({
-                    where: {
-                        id: id,
-                    },
-                    data: {
-                        name: dto.name,
-                        role: dto.role,
-                    },
+                    where: {id: id,}, data: { ...dto},
                 })
                 return { message: "Manager updated", staff };
 }
