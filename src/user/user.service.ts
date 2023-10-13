@@ -30,7 +30,7 @@ export class UserService {
     await this.checkStaffExist(id, 'Staff does not exist');
     const staff = await this.prisma.staffMember.update({
       where: { id: id },
-      data: { ...dto },
+      data: { ...dto, id:id },
     });
     return { message: 'Staff updated successfully', staff };
   }
